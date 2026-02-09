@@ -3,7 +3,7 @@
 
 CreatorLink AI is a full-stack web application that helps small content creators generate content ideas and discover potential collaborators using AI-powered recommendations. Instead of building an internal messaging system, the platform connects creators directly through their Instagram profiles to encourage real-world collaboration.
 
-This project was built to explore the intersection of **software engineering**, **generative AI**, and **data engineering**, while solving a real problem faced by early-stage creators.
+
 
 ---
 
