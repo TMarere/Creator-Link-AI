@@ -1,5 +1,5 @@
 from sqlachemy import Column, Integer, String, DateTime
-from app.database import Base
+from Backend.app.db.database import Base
 
 Class User(Base):
 __tablename__ = "users"
