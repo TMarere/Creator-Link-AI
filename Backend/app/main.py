@@ -1,15 +1,19 @@
 from fastapi import FastAPI
 from app.db.database import Base, engine
 from app.db.models import users  # noqa: F401
-
+from app.api.v1.recommendations import router as recommendations_router
+from app.api.v1.users import router as users_router
 
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="CreatorAI Link")
+
+app.include_router(users_router)
+app.include_router(recommendations_router)
+
+
 @app.get("/")
 def root():
 
-
     return {"message": "CreatorLink AI backend is running"}
-

@@ -1,11 +1,13 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
+
 
 class CreatorBase(BaseModel):
     email: EmailStr
     userName: str
 
-class UserResponse(CreatorBase):
-    id: int
 
-    class Config:
-        orm_mode = True
+class UserResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    email: EmailStr
+    userName: str

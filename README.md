@@ -29,3 +29,22 @@ CreatorLink AI is a full-stack web application that helps small content creators
 
 ## 🧠 System Architecture
 
+## 🐳 Docker
+
+- The repository ships a `Dockerfile` that builds the backend using the pinned `Backend/requirements.txt`; it installs dependencies, copies the backend source, and runs `uvicorn app.main:app --host 0.0.0.0 --port 8000`.
+- Build the image with `docker build -t creator-link-ai .` (run from the repo root) and run it with `docker run -p 8000:8000 creator-link-ai`. The backend will then be reachable at `http://localhost:8000`.
+- Use `.env` variables before building or mount a file into `/app/backend/.env` if you need custom secrets or database URLs.
+
+## ⚙️ Backend API & Setup
+
+- **Bootstrap steps**:
+  1. `cd Backend`
+  2. `source venv/bin/activate` (or use `./venv/bin/python` directly)
+  3. `python -m pip install -r requirements.txt`
+  4. `python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
+  5. `python -m pytest app/test/tests.py`
+
+- **Documented endpoints**:
+  - `POST /users/` – Creates a creator. Accepts `{"email": "...", "userName": "..."}` and returns the saved `UserResponse`.
+  - `GET /users/` – Lists every creator record in the database.
+  - `GET /recommendations/{user_id}` – Calls the stubbed `generate_recommendations(user_id)` and returns `{"user_id": ..., "recommendations": [...]}` so clients can start consuming recommendation data right away.
