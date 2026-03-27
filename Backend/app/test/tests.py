@@ -16,6 +16,7 @@ def test_create_user():
     })
     assert response.status_code == 200
     payload = response.json()
+    
     assert payload["userName"] == "Tanatswa"
 
     list_response = client.get("/users/")
