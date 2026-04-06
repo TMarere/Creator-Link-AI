@@ -43,8 +43,20 @@ CreatorLink AI is a full-stack web application that helps small content creators
   3. `python -m pip install -r requirements.txt`
   4. `python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
   5. `python -m pytest app/test/tests.py`
+  6. Keep this backend process running while you develop; your frontend fetches from `localhost:8000` and the root returns `{"message":"CreatorLink AI backend is running"}` so you know it is healthy.
 
 - **Documented endpoints**:
   - `POST /users/` – Creates a creator. Accepts `{"email": "...", "userName": "..."}` and returns the saved `UserResponse`.
   - `GET /users/` – Lists every creator record in the database.
   - `GET /recommendations/{user_id}` – Calls the stubbed `generate_recommendations(user_id)` and returns `{"user_id": ..., "recommendations": [...]}` so clients can start consuming recommendation data right away.
+- `GET /connections?niche={niche}&excludeId={id}` – Returns creators that share the same niche so the front-end “Connection” tab can show relevant matches.
+- Recommendations now combine same-niche creators plus curated placeholders using the new `generate_recommendations(db, user_id, niche)` helper, so the UI sees richer strings like `Taylor Creator · Fashion` before falling back to defaults.
+
+## 🎨 Frontend
+
+- The Next.js client lives in `Frontend/frontend` and starts with a sign-in/sign-up card; after onboarding it renders the recommendation canvas plus the discovery tab for creators in your niche.
+- Run the frontend workflow from that directory:
+  1. `npm install`
+  2. `NEXT_PUBLIC_API_BASE=http://localhost:8000 npm run dev`
+  3. `npm run lint`
+- The environment variable `NEXT_PUBLIC_API_BASE` should point to whichever backend host you want to talk to (the default is `http://localhost:8000`).
