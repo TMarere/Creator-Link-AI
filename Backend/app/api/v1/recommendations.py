@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
+from app.Schemas.schemas import RecommendationPayload
 from app.services.recommendation import generate_recommendations
 
 router = APIRouter(prefix="/recommendations", tags=["Recommendations"])
@@ -16,7 +17,5 @@ def get_recommendations(
     """
     Return recommendation candidates for a creator.
     """
-    return {
-        "user_id": user_id,
-        "recommendations": generate_recommendations(db, user_id, niche),
-    }
+    payload = generate_recommendations(db, user_id, niche)
+    return RecommendationPayload(**payload)

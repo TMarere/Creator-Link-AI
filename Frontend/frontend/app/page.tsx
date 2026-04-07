@@ -7,27 +7,63 @@ import { CREATOR_STORAGE_KEY, USER_STORAGE_KEY } from "./lib/storage";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:8000";
 
-type Creator = {
+type CreatorCard = {
   id: number;
-  email: string;
   userName: string;
   niche: string;
+  instagram: string | null;
+  youtube: string | null;
+  tiktok: string | null;
 };
+
+type SignedInCreator = CreatorCard & {
+  email: string;
+};
+
+type RecommendationSet = {
+  short_form: string[];
+  long_form: string[];
+  deep_dive: string[];
+  related_creators: string[];
+};
+
+function Section({
+  title,
+  items,
+}: {
+  title: string;
+  items: string[];
+}) {
+  if (items.length === 0) return null;
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+      <p className="text-xs uppercase tracking-[0.4em] text-white/60">{title}</p>
+      <ul className="mt-3 flex flex-col gap-1 text-sm text-white">
+        {items.map((entry) => (
+          <li key={entry} className="text-sm text-white/75">
+            {entry}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default function Home() {
   const router = useRouter();
-  const [currentUser, setCurrentUser] = useState<Creator | null>(null);
-  const [users, setUsers] = useState<Creator[]>([]);
+  const [currentUser, setCurrentUser] = useState<SignedInCreator | null>(null);
+  const [users, setUsers] = useState<CreatorCard[]>([]);
   const [message, setMessage] = useState<string | null>(null);
-  const [recommendations, setRecommendations] = useState<string[]>([]);
-  const [connections, setConnections] = useState<Creator[]>([]);
+  const [recommendations, setRecommendations] =
+    useState<RecommendationSet | null>(null);
+  const [connections, setConnections] = useState<CreatorCard[]>([]);
   const [isFetchingRecs, setIsFetchingRecs] = useState(false);
   const [isFetchingConnections, setIsFetchingConnections] = useState(false);
   const [activeTab, setActiveTab] = useState<"recommendations" | "connections">(
     "recommendations"
   );
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortKey, setSortKey] = useState<"userName" | "email">("userName");
+  const [sortKey, setSortKey] = useState<"userName" | "niche">("userName");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
@@ -37,7 +73,7 @@ export default function Home() {
       router.push("/signin");
       return;
     }
-    const parsed: Creator = JSON.parse(storedUser);
+    const parsed: SignedInCreator = JSON.parse(storedUser);
     setCurrentUser(parsed);
     const cachedCreators = window.localStorage.getItem(CREATOR_STORAGE_KEY);
     if (cachedCreators) {
@@ -58,8 +94,10 @@ export default function Home() {
       if (!query) return true;
       return (
         creator.userName.toLowerCase().includes(query) ||
-        creator.email.toLowerCase().includes(query) ||
-        creator.niche.toLowerCase().includes(query)
+        creator.niche.toLowerCase().includes(query) ||
+        (creator.instagram?.toLowerCase().includes(query) ?? false) ||
+        (creator.youtube?.toLowerCase().includes(query) ?? false) ||
+        (creator.tiktok?.toLowerCase().includes(query) ?? false)
       );
     });
 
@@ -77,7 +115,7 @@ export default function Home() {
     try {
       const response = await fetch(`${API_BASE}/users/`);
       if (!response.ok) throw new Error("Unable to load creators");
-      const data: Creator[] = await response.json();
+      const data: CreatorCard[] = await response.json();
       setUsers(data);
       setMessage(null);
       if (typeof window !== "undefined") {
@@ -88,17 +126,17 @@ export default function Home() {
     }
   }
 
-  async function loadRecommendations(user: Creator) {
+  async function loadRecommendations(user: CreatorCard) {
     setActiveTab("recommendations");
     setIsFetchingRecs(true);
-    setRecommendations([]);
+    setRecommendations(null);
     try {
       const url = new URL(`${API_BASE}/recommendations/${user.id}`);
       url.searchParams.set("niche", user.niche);
       const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch recs");
-      const payload = await response.json();
-      setRecommendations(payload.recommendations ?? []);
+      const payload: RecommendationSet = await response.json();
+      setRecommendations(payload);
     } catch (error) {
       setMessage("Could not load recommendations.");
     } finally {
@@ -106,7 +144,7 @@ export default function Home() {
     }
   }
 
-  async function loadConnections(user: Creator) {
+  async function loadConnections(user: CreatorCard) {
     setActiveTab("connections");
     setIsFetchingConnections(true);
     setConnections([]);
@@ -125,7 +163,7 @@ export default function Home() {
     }
   }
 
-  function handleConnect(target: Creator) {
+  function handleConnect(target: CreatorCard) {
     setMessage(`Connection request sent to ${target.userName}.`);
   }
 
@@ -199,7 +237,17 @@ export default function Home() {
                       </p>
                       <span className="text-xs text-white/50">{creator.niche}</span>
                     </div>
-                    <p className="text-xs text-white/60">{creator.email}</p>
+                    <div className="text-xs text-white/60">
+                      {creator.instagram && (
+                        <span className="mr-3">IG: {creator.instagram}</span>
+                      )}
+                      {creator.youtube && (
+                        <span className="mr-3">YT: {creator.youtube}</span>
+                      )}
+                      {creator.tiktok && (
+                        <span className="mr-3">TikTok: {creator.tiktok}</span>
+                      )}
+                    </div>
                   </button>
                 ))
               )}
@@ -245,24 +293,22 @@ export default function Home() {
           </div>
 
           {activeTab === "recommendations" && (
-            <div className="flex flex-col gap-3">
-              {isFetchingRecs ? (
+            <div className="flex flex-col gap-4">
+              {isFetchingRecs && (
                 <p className="text-sm text-white/60">Loading recommendations…</p>
-              ) : recommendations.length === 0 ? (
+              )}
+              {!isFetchingRecs && !recommendations && (
                 <p className="text-sm text-white/60">
-                  Click a creator to surface collaborators.
+                  Select a creator to load niche ideas.
                 </p>
-              ) : (
-                <div className="grid gap-3">
-                  {recommendations.map((rec) => (
-                    <div
-                      key={rec}
-                      className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white"
-                    >
-                      {rec}
-                    </div>
-                  ))}
-                </div>
+              )}
+              {!isFetchingRecs && recommendations && (
+                <>
+                  <Section title="Short-form sparks" items={recommendations.short_form} />
+                  <Section title="Long-form series" items={recommendations.long_form} />
+                  <Section title="Deep-dive themes" items={recommendations.deep_dive} />
+                  <Section title="Related creators" items={recommendations.related_creators} />
+                </>
               )}
             </div>
           )}
@@ -286,7 +332,17 @@ export default function Home() {
                         <p className="text-sm font-semibold text-white">
                           {creator.userName}
                         </p>
-                        <p className="text-xs text-white/60">{creator.email}</p>
+                        <p className="text-xs text-white/60">
+                          {creator.instagram && (
+                            <span className="mr-3">IG: {creator.instagram}</span>
+                          )}
+                          {creator.youtube && (
+                            <span className="mr-3">YT: {creator.youtube}</span>
+                          )}
+                          {creator.tiktok && (
+                            <span className="mr-3">TikTok: {creator.tiktok}</span>
+                          )}
+                        </p>
                       </div>
                       <button
                         className="rounded-full border border-white/30 px-3 py-1 text-xs text-white/70 transition hover:border-white hover:text-white"

@@ -46,11 +46,11 @@ CreatorLink AI is a full-stack web application that helps small content creators
   6. Keep this backend process running while you develop; your frontend fetches from `localhost:8000` and the root returns `{"message":"CreatorLink AI backend is running"}` so you know it is healthy.
 
 - **Documented endpoints**:
-  - `POST /users/` – Creates a creator. Accepts `{"email": "...", "userName": "..."}` and returns the saved `UserResponse`.
+  - `POST /users/` – Creates a creator. Accepts `{"email": "...", "userName": "...", "niche": "...", "instagram": "...", "youtube": "...", "tiktok": "..."}` (the social handles are optional) and returns the saved `UserResponse`.
   - `GET /users/` – Lists every creator record in the database.
-  - `GET /recommendations/{user_id}` – Calls the stubbed `generate_recommendations(user_id)` and returns `{"user_id": ..., "recommendations": [...]}` so clients can start consuming recommendation data right away.
+  - `GET /recommendations/{user_id}` – Returns structured content ideas (`short_form`, `long_form`, `deep_dive`) tailored to that creator’s niche plus `related_creators`.
 - `GET /connections?niche={niche}&excludeId={id}` – Returns creators that share the same niche so the front-end “Connection” tab can show relevant matches.
-- Recommendations now combine same-niche creators plus curated placeholders using the new `generate_recommendations(db, user_id, niche)` helper, so the UI sees richer strings like `Taylor Creator · Fashion` before falling back to defaults.
+- Recommendations now combine same-niche creators plus curated short/long/deep prompts using the new `generate_recommendations(db, user_id, niche)` helper, so the UI sees targeted content-creation ideas before falling back to defaults.
 
 ## 🎨 Frontend
 

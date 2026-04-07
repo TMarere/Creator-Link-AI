@@ -16,5 +16,5 @@ The default development server starts on [http://localhost:3000](http://localhos
 ## UX flow
 
 1. `/signin` is the entry point; it looks up your email via `GET /users` and, when found, stores that creator before redirecting to `/`.
-2. If the email doesn’t exist yet, follow the “Create one” link to `/signup`, enter email + display name + niche, and the app will create the profile and jump back to `/`.
-3. The dashboard (`/`) only renders when a signed-in creator exists in `localStorage`. It exposes search/sorting on the creator list, plus dedicated “Recommendations” and “Connections” tabs powered by `/recommendations` and `/connections`.
+2. If the email doesn’t exist yet, follow the “Create one” link to `/signup`, enter email + display name + niche + optional Instagram/YouTube/TikTok handles, and the app will create the profile and jump back to `/`.
+3. The dashboard (`/`) only renders when a signed-in creator exists in `localStorage`. It exposes search/sorting on the creator list, plus dedicated “Recommendations” (short/long/deep idea lists + related creators) and “Connections” tabs powered by `/recommendations` and `/connections`.

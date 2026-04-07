@@ -13,6 +13,9 @@ type Creator = {
   email: string;
   userName: string;
   niche: string;
+  instagram: string | null;
+  youtube: string | null;
+  tiktok: string | null;
 };
 
 export default function SignInPage() {
@@ -33,15 +36,16 @@ export default function SignInPage() {
     setMessage("Searching for your profile…");
 
     try {
-      const response = await fetch(`${API_BASE}/users/`);
-      if (!response.ok) throw new Error("Unable to reach backend");
-      const data: Creator[] = await response.json();
-      const match = data.find((creator) => creator.email === email.toLowerCase());
-      if (!match) {
+      const url = new URL(`${API_BASE}/users/me`);
+      url.searchParams.set("email", email.toLowerCase());
+      const response = await fetch(url);
+      if (response.status === 404) {
         setStatus("error");
         setMessage("No account found. Please sign up.");
         return;
       }
+      if (!response.ok) throw new Error("Unable to reach backend");
+      const match: Creator = await response.json();
       if (typeof window !== "undefined") {
         window.localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(match));
       }

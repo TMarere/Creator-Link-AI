@@ -21,6 +21,9 @@ export default function SignUpPage() {
     email: "",
     userName: "",
     niche: "",
+    instagram: "",
+    youtube: "",
+    tiktok: "",
   });
   const [status, setStatus] = useState<"idle" | "saving" | "error">("idle");
   const [message, setMessage] = useState<string | null>(null);
@@ -85,10 +88,10 @@ export default function SignUpPage() {
           </p>
         </div>
 
-        <form
-          className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/40 p-6"
-          onSubmit={handleSignUp}
-        >
+      <form
+        className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/40 p-6"
+        onSubmit={handleSignUp}
+      >
           <label className="text-sm text-white/70">
             Email
             <input
@@ -126,6 +129,50 @@ export default function SignUpPage() {
               placeholder="Fashion, AI, or Wellness"
             />
           </label>
+          <div className="grid gap-3 md:grid-cols-3">
+            <label className="text-sm text-white/70">
+              Instagram handle
+              <input
+                value={formState.instagram}
+                onChange={(event) =>
+                  setFormState((prev) => ({
+                    ...prev,
+                    instagram: event.target.value,
+                  }))
+                }
+                className="mt-1 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:border-white focus:outline-none"
+                placeholder="@yourhandle"
+              />
+            </label>
+            <label className="text-sm text-white/70">
+              YouTube channel
+              <input
+                value={formState.youtube}
+                onChange={(event) =>
+                  setFormState((prev) => ({
+                    ...prev,
+                    youtube: event.target.value,
+                  }))
+                }
+                className="mt-1 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:border-white focus:outline-none"
+                placeholder="Your channel link"
+              />
+            </label>
+            <label className="text-sm text-white/70">
+              TikTok handle
+              <input
+                value={formState.tiktok}
+                onChange={(event) =>
+                  setFormState((prev) => ({
+                    ...prev,
+                    tiktok: event.target.value,
+                  }))
+                }
+                className="mt-1 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:border-white focus:outline-none"
+                placeholder="@tiktokHandle"
+              />
+            </label>
+          </div>
           <button
             type="submit"
             className="mt-2 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-3 text-lg font-semibold text-white transition hover:brightness-110 disabled:opacity-70"
