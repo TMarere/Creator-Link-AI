@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, JSON, String
 from app.db.database import Base
 
 class User(Base):
@@ -11,4 +11,5 @@ class User(Base):
     instagram = Column(String, nullable=True)
     youtube = Column(String, nullable=True)
     tiktok = Column(String, nullable=True)
+    embedding = Column(JSON, nullable=True)
     niche = Column(String)

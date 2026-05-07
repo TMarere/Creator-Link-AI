@@ -206,7 +206,7 @@ export default function Home() {
                 <button
                   className="rounded-full border border-white/20 px-3 py-1 transition hover:border-white"
                   onClick={() =>
-                    setSortKey((prev) => (prev === "userName" ? "email" : "userName"))
+                    setSortKey((prev) => (prev === "userName" ? "niche" : "userName"))
                   }
                 >
                   Sort: {sortKey}
@@ -272,7 +272,7 @@ export default function Home() {
               <button
                 className={`rounded-2xl px-3 py-1 text-xs font-semibold transition ${
                   activeTab === "recommendations"
-                    ? "bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white"
+                    ? "bg-gradient-to-r from-[#517891] via-[#3e647b] to-[#2a4b5d] text-white"
                     : "border border-white/30 text-white/70"
                 }`}
                 onClick={() => setActiveTab("recommendations")}
@@ -282,7 +282,7 @@ export default function Home() {
               <button
                 className={`rounded-2xl px-3 py-1 text-xs font-semibold transition ${
                   activeTab === "connections"
-                    ? "bg-gradient-to-r from-teal-500 to-cyan-500 text-white"
+                    ? "bg-gradient-to-r from-[#517891] via-[#3e647b] to-[#2a4b5d] text-white"
                     : "border border-white/30 text-white/70"
                 }`}
                 onClick={() => void loadConnections(currentUser)}

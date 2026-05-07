@@ -71,7 +71,7 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-screen bg-[#040510] px-4 py-16 text-white">
-      <div className="mx-auto flex max-w-3xl flex-col gap-8 rounded-3xl border border-white/10 bg-gradient-to-br from-indigo-500/30 via-black/60 to-black/80 p-10 shadow-[0_35px_80px_rgba(5,6,11,0.9)]">
+      <div className="mx-auto flex max-w-3xl flex-col gap-8 rounded-3xl border border-white/10 bg-gradient-to-br from-[#517891]/35 via-black/60 to-black/80 p-10 shadow-[0_35px_80px_rgba(5,6,11,0.9)]">
         <div>
           <p className="text-xs uppercase tracking-[0.4em] text-white/60">
             Creator-Link.AI
@@ -81,7 +81,7 @@ export default function SignUpPage() {
           </h1>
           <p className="mt-2 text-sm text-white/60">
             Already have an account?{" "}
-            <Link href="/signin" className="text-rose-400 underline">
+            <Link href="/signin" className="text-[#7fb2cf] underline">
               Sign in
             </Link>
             .
@@ -175,7 +175,7 @@ export default function SignUpPage() {
           </div>
           <button
             type="submit"
-            className="mt-2 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-3 text-lg font-semibold text-white transition hover:brightness-110 disabled:opacity-70"
+            className="mt-2 rounded-2xl bg-gradient-to-r from-[#517891] via-[#3e647b] to-[#2a4b5d] px-6 py-3 text-lg font-semibold text-white transition hover:brightness-110 disabled:opacity-70"
             disabled={status === "saving"}
           >
             {status === "saving" ? "Creating…" : "Create account"}
