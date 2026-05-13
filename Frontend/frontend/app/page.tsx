@@ -199,7 +199,7 @@ export default function Home() {
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
                   className="mt-1 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-white/40 focus:border-white focus:outline-none"
-                  placeholder="Search by name, email, or niche"
+                  placeholder="Search by name, niche, or social handle"
                 />
               </div>
               <div className="flex items-center gap-2 text-xs uppercase tracking-[0.35em] text-white/60">
@@ -265,7 +265,7 @@ export default function Home() {
                 {currentUser.userName}
               </p>
               <p className="text-sm text-white/60">
-                {currentUser.email} · {currentUser.niche}
+                {currentUser.niche}
               </p>
             </div>
             <div className="flex gap-2">

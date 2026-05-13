@@ -12,4 +12,3 @@ class User(Base):
     youtube = Column(String, nullable=True)
     tiktok = Column(String, nullable=True)
     embedding = Column(JSON, nullable=True)
-    niche = Column(String)

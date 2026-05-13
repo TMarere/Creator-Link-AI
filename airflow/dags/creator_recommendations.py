@@ -4,7 +4,7 @@ from typing import Dict, List
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-from app.core.config import settings
+from core.config import settings
 from app.db.database import SessionLocal
 from app.db.models.recommendations import Recommendation
 from app.db.models.users import User

@@ -3,9 +3,18 @@ import math
 from typing import Iterable, List
 
 from openai import OpenAI
-from openai.error import OpenAIError
 
-from app.core.config import settings
+# openai-python has changed exception import paths across versions.
+# Keep this tolerant so local installs don't break at import-time.
+try:  # pragma: no cover
+    from openai import OpenAIError  # type: ignore
+except Exception:  # pragma: no cover
+    try:
+        from openai.error import OpenAIError  # type: ignore
+    except Exception:  # pragma: no cover
+        OpenAIError = Exception  # type: ignore
+
+from core.config import settings
 
 logger = logging.getLogger("app.services.embeddings")
 

@@ -1,0 +1,13 @@
+**/.env*
+**/*.db
+**/*.sqlite*
+**/__pycache__/
+**/.pytest_cache/
+**/node_modules/
+
+# Python venv
+Backend/venv/
+
+# macOS
+.DS_Store
+
